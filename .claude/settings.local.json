@@ -5,7 +5,10 @@
       "Bash(composer require:*)",
       "Bash(composer:*)",
       "Bash(php artisan:*)",
-      "Bash(curl -I http://localhost:8000)"
+      "Bash(curl -I http://localhost:8000)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

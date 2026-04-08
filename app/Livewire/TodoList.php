@@ -25,12 +25,9 @@ class TodoList extends Component
 
     public function toggleTask($id)
     {
-        $task = Task::find($id);
-        if ($task) {
-            $task->update([
-                'is_completed' => !$task->is_completed,
-            ]);
-        }
+        Task::where('id', $id)->update([
+            'is_completed' => \DB::raw('NOT is_completed')
+        ]);
     }
 
     public function deleteTask($id)

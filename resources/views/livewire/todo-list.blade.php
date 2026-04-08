@@ -20,7 +20,7 @@
         </form>
 
         <div class="space-y-4">
-            @foreach($tasks as $task)
+            @forelse($tasks as $task)
                 <div
                     wire:key="{{ $task->id }}"
                     class="group flex items-center justify-between p-4 border-4 border-black rounded-2xl transition-all hover:scale-105 {{ $task->is_completed ? 'bg-gray-200' : 'bg-yellow-100' }}"
@@ -46,13 +46,11 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-            @endforeach
-
-            @if($tasks->isEmpty())
+            @empty
                 <div class="text-center py-8 text-gray-400 font-bold italic">
                     Nothing to do! Party time! 🎉
                 </div>
-            @endif
+            @endforelse
         </div>
 
         @if($tasks->where('is_completed', true)->count() > 0)
