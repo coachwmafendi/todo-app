@@ -6,8 +6,13 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
+<<<<<<< HEAD
         "php": "^8.4",
         "laravel/framework": "^13.0",
+=======
+        "php": "^8.3",
+        "laravel/framework": "^12.0",
+>>>>>>> 61371b73ed27784381e9d42ce004114f9b64fc1b
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^4.2"
     },
