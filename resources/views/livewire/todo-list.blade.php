@@ -13,7 +13,7 @@
             >
             <button
                 type="submit"
-                class="bg-pink-500 hover:bg-pink-600 text-white font-black px-6 py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
+                class="bg-pink-500 hover:bg-pink-600 text-white font-black px-6 py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all min-w-[48px] min-h-[48px]"
             >
                 ADD!
             </button>
@@ -41,10 +41,25 @@
 
                     <button
                         wire:click="deleteTask({{ $task->id }})"
-                        class="opacity-0 group-hover:opacity-100 bg-red-500 text-white p-2 rounded-lg border-2 border-black hover:bg-red-600 transition-all"
+                        class="opacity-0 group-hover:opacity-100 bg-red-500 text-white p-2 rounded-lg border-2 border-black hover:bg-red-600 transition-all min-w-[48px] min-h-[48px] flex items-center justify-center"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
+                    
+                    <div class="flex gap-2 md:hidden">
+                        <button
+                            wire:click="attachPhoto({{ $task->id }})"
+                            class="bg-pink-500 text-white rounded-full shadow-lg min-w-[48px] min-h-[48px] flex items-center justify-center border-2 border-black"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                        <button
+                            wire:click="tagLocation({{ $task->id }})"
+                            class="bg-indigo-500 text-white rounded-full shadow-lg min-w-[48px] min-h-[48px] flex items-center justify-center border-2 border-black"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                    </div>
                 </div>
             @empty
                 <div class="text-center py-8 text-gray-400 font-bold italic">
