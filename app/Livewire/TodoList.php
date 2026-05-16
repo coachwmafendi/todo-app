@@ -3,11 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\Task;
+use App\Services\NativeFeatureService;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 
 class TodoList extends Component
 {
+    protected $nativeService;
+
+    public function __construct()
+    {
+        $this->nativeService = new NativeFeatureService();
+    }
     #[Rule('required|min:3|max:255')]
     public $title = '';
 
@@ -45,6 +52,49 @@ class TodoList extends Component
     {
         Task::where('is_completed', true)->delete();
         $this->queueSync();
+    }
+
+    public function attachPhoto($taskId)
+    {
+        $task = Task::find($taskId);
+        if (!$task) {
+            return;
+        }
+
+        $photoPath = $this->nativeService->capturePhoto();
+        if ($photoPath) {
+            $task->update([
+                'photo_path' => $photoPath,
+                'sync_status' => 'pending',
+            ]);
+        }
+    }
+
+    public function tagLocation($taskId)
+    {
+        $task = Task::find($taskId);
+        if (!$task) {
+            return;
+        }
+
+        $location = $this->nativeService->getCurrentLocation();
+        if ($location) {
+            $task->update([
+                'location_lat' => $location['lat'],
+                'location_lng' => $location['lng'],
+                'sync_status' => 'pending',
+            ]);
+        }
+    }
+
+    public function registerDevice()
+    {
+        $token = $this->nativeService->registerPushNotifications();
+        if ($token) {
+            session()->flash('device_registered', 'Device successfully registered for push notifications!');
+        } else {
+            session()->flash('device_error', 'Failed to register device for push notifications.');
+        }
     }
 
     private function queueSync(): void
