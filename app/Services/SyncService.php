@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class SyncService
 {
-    public function __construct(private string $baseUrl, private string $apiToken) {}
+    public function __construct(private string $baseUrl, private string $apiToken): void {}
 
     public function pushPending(): void
     {
@@ -37,7 +37,9 @@ class SyncService
                     'last_synced_at' => now(),
                 ]);
             }
+            \Log::info('Push sync completed', ['tasks_count' => $pending->count()]);
         } else {
+            \Log::error('Push sync failed', ['status' => $response->status()]);
             $pending->each->markError();
         }
     }
@@ -46,10 +48,15 @@ class SyncService
     {
         $lastSync = Task::whereNotNull('last_synced_at')->max('last_synced_at');
 
-        $response = Http::withToken($this->apiToken)
-            ->get("{$this->baseUrl}/api/sync", ['since' => $lastSync]);
+        try {
+            $response = Http::withToken($this->apiToken)
+                ->get("{$this->baseUrl}/api/sync", ['since' => $lastSync]);
 
-        if ($response->successful()) {
+            if (!$response->successful()) {
+                \Log::error('Pull sync failed', ['status' => $response->status()]);
+                return;
+            }
+
             foreach ($response->json('tasks', []) as $taskData) {
                 Task::updateOrCreate(
                     ['remote_id' => $taskData['id']],
@@ -62,6 +69,9 @@ class SyncService
                     ]
                 );
             }
+            \Log::info('Pull sync completed', ['tasks_count' => count($response->json('tasks', []))]);
+        } catch (\Exception $e) {
+            \Log::error('Pull sync exception', ['error' => $e->getMessage()]);
         }
     }
 }
