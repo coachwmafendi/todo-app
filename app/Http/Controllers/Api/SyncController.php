@@ -41,6 +41,10 @@ class SyncController
 
     public function pull(Request $request)
     {
+        $request->validate([
+            'since' => 'nullable|date',
+        ]);
+
         $since = $request->query('since');
 
         $query = Task::query();
