@@ -27,8 +27,9 @@ class TodoList extends Component
 
     public function toggleTask($id)
     {
-        Task::where('id', $id)->update([
-            'is_completed' => \DB::raw('NOT is_completed'),
+        $task = Task::find($id);
+        $task->update([
+            'is_completed' => !$task->is_completed,
             'sync_status' => 'pending',
         ]);
         $this->queueSync();
