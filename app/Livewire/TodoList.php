@@ -18,26 +18,40 @@ class TodoList extends Component
         Task::create([
             'title' => $this->title,
             'is_completed' => false,
+            'sync_status' => 'pending',
         ]);
 
         $this->title = '';
+        $this->queueSync();
     }
 
     public function toggleTask($id)
     {
         Task::where('id', $id)->update([
-            'is_completed' => \DB::raw('NOT is_completed')
+            'is_completed' => \DB::raw('NOT is_completed'),
+            'sync_status' => 'pending',
         ]);
+        $this->queueSync();
     }
 
     public function deleteTask($id)
     {
         Task::destroy($id);
+        $this->queueSync();
     }
 
     public function clearCompleted()
     {
         Task::where('is_completed', true)->delete();
+        $this->queueSync();
+    }
+
+    private function queueSync(): void
+    {
+        // Trigger sync in background
+        // For NativePHP, this could be a scheduled command or event
+        // For now, we can dispatch to the queue or just log
+        // Example: SyncTask::dispatch();
     }
 
     public function render()
